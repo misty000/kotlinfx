@@ -34,7 +34,7 @@ fun main(args: Array<String>) {
             // TODO Static properties are not supported yet
             if (Modifier.isStatic(method.getModifiers())) continue
 
-            val shortName = dekeyword(name.substring(0..name.length-9))
+            val shortName = dekeyword(name.substring(0..name.length() -9))
 
             // See http://docs.oracle.com/javafx/2/api/javafx/beans/property/package-summary.html
             val ty = method.getGenericReturnType()!!.getTypeName()!!

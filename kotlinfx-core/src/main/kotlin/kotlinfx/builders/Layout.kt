@@ -5,7 +5,7 @@ import javafx.geometry.Orientation
 import javafx.scene.Node
 import javafx.collections.ObservableList
 
-trait K : javafx.scene.layout.Pane {
+abstract class  K : javafx.scene.layout.Pane() {
     public fun javafx.scene.Node.plus(): javafx.scene.Node {
         getChildren()!!.add(this)
         return this

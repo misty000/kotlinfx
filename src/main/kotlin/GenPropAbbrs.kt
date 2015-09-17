@@ -42,7 +42,7 @@ fun main(args: Array<String>) {
                 "javafx.scene.control.TreeTableView.columnResizePolicyProperty"
             )) continue
 
-            val shortName = dekeyword(name.substring(0..name.length-9)) + "p"
+            val shortName = dekeyword(name.substring(0..name.length() -9)) + "p"
 
             val ty = kotlinfyType(method.getGenericReturnType()!!.getTypeName()!!)
             val tyParamList = clazz.getTypeParameters().toArrayList()

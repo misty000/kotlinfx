@@ -25,7 +25,7 @@ fun main(args: Array<String>) {
         val methods = clazz.getDeclaredMethods().toList()
         val xetterPairs = methods.
                 filter { val name = it.getName()!!; val modifiers = it.getModifiers()
-                         (name.startsWith("get") || name.startsWith("set")) && name.length > 3 &&
+                         (name.startsWith("get") || name.startsWith("set")) && name.length() > 3 &&
                          (!name.startsWith("get") || it.getParameterCount() == 0) &&
                          (!name.startsWith("set") || it.getParameterCount() == 1) &&
                          !Modifier.isStatic(modifiers) && // TODO Static xetters are not supported yet
@@ -74,7 +74,7 @@ fun main(args: Array<String>) {
             val tyParamsFirst = util.genFirstTypeParamsString(tyParamList)
             val template =
 """
-[suppress("UNNECESSARY_NOT_NULL_ASSERTION")]
+@suppress("UNNECESSARY_NOT_NULL_ASSERTION")
 public $va $tyParamsFirst $className$tyParams.$name: $ty
     get() = ${if (!b) "get$suffix" else "${name}Property()!!.get"}()!!
 ${if (setter != null)

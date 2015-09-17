@@ -9,10 +9,10 @@ import java.nio.file.Paths
 import java.lang.reflect.TypeVariable
 
 public val projectRoot: String =
-    Paths.get(javaClass<Unit>().getClassLoader()!!.getResource(".")!!.getPath()!!)!!.
+    Paths.get(javaClass<Unit>().getClassLoader()!!.getResource(".")!!.toURI()!!)!!.
           getParent()!!.getParent()!!.getParent()!!.toFile().getAbsolutePath()
 
-[suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")]
+@suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
 public fun allJavaFXClasses(): Set<Class<out Object>> {
     // http://stackoverflow.com/questions/520328/can-you-find-all-classes-in-a-package-using-reflection
     val c1 = ClasspathHelper.contextClassLoader()
@@ -25,15 +25,15 @@ public fun allJavaFXClasses(): Set<Class<out Object>> {
     return reflections.getSubTypesOf(javaClass<Object>())!!
 }
 
-public fun genFirstTypeParamsString(typeParams: MutableList<TypeVariable<out Class<out Object>?>?>): String =
+public fun genFirstTypeParamsString(typeParams: List<TypeVariable<out Class<out Any>?>?>): String =
     if (typeParams.isEmpty()) "" else
     // The complexity is due to having to consider bounds on generic parameters
         "<${typeParams map {
-            val bs = it!!.getBounds()!! map { kotlinfyTypeBound(it.toString()!!) } filterNot { it == "Any" }
+            val bs = it!!.getBounds()!! map { kotlinfyTypeBound(it.toString()) } filterNot { it == "Any" }
             val bounds = if (bs.isEmpty()) "" else ":" + bs.join(", ")
             "$it$bounds" } join ", "}>"
 
-public fun genTypeParamsString(typeParams: MutableList<TypeVariable<out Class<out Object>?>?>): String =
+public fun genTypeParamsString(typeParams: List<TypeVariable<out Class<out Any>?>?>): String =
     if (typeParams.isEmpty()) "" else "<${typeParams.join(", ")}>"
 
 public fun kotlinfyTypeBound(ty: String): String {
@@ -74,7 +74,7 @@ public fun kotlinfyType(ty: String): String {
     //   javafx.scene.control.TreeTableColumn.javafx.scene.control.TreeTableColumn$CellEditEvent
     // But we want:
     //   javafx.scene.control.TreeTableColumn.CellEditEvent
-    t = t.replaceAll("""\.javafx.*?\$""", ".")
+    t = t.replace("""\.javafx.*?\$""".toRegex(), ".")
     // Also sometimes they look like this:
     //   javafx.scene.control.TreeTableColumn$CellEditEvent
     // But we want:
@@ -105,11 +105,11 @@ fun getPropertyValueType0(ty: String, xs: List<String>, ys: List<String>): Strin
         val d = "javafx.beans.property.ReadOnly${x}PropertyBase<"
         val e = "javafx.beans.property.Simple${x}Property<"
         when {
-            ty.startsWith(a) -> return ty.substring(a.length..ty.length - 2)
-            ty.startsWith(b) -> return ty.substring(b.length..ty.length - 2)
-            ty.startsWith(c) -> return ty.substring(c.length..ty.length - 2)
-            ty.startsWith(d) -> return ty.substring(d.length..ty.length - 2)
-            ty.startsWith(e) -> return ty.substring(e.length..ty.length - 2)
+            ty.startsWith(a) -> return ty.substring(a.length()..ty.length() - 2)
+            ty.startsWith(b) -> return ty.substring(b.length()..ty.length() - 2)
+            ty.startsWith(c) -> return ty.substring(c.length()..ty.length() - 2)
+            ty.startsWith(d) -> return ty.substring(d.length()..ty.length() - 2)
+            ty.startsWith(e) -> return ty.substring(e.length()..ty.length() - 2)
         }
     }
     for (y in ys) {
