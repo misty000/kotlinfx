@@ -48,6 +48,10 @@ subprojects {
 
     apply plugin: 'kotlin'
 
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
     repositories {
         mavenCentral()
         maven {
@@ -147,6 +151,16 @@ project(":kotlinfx-core") {
     task publishgh(type:Exec, dependsOn: publishgh1) {
         workingDir ghpagesPath
         commandLine 'git', 'push', '-f'
+    }
+
+    task sourcesJar(type: Jar) {
+//        println(sourceSets.main.java.srcDirs)
+        from sourceSets.main.java.srcDirs
+        classifier = 'sources'
+    }
+
+    artifacts {
+        archives sourcesJar
     }
 }
 
