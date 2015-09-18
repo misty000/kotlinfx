@@ -76,7 +76,7 @@ fun template<T>(name: String, f: (() -> T)?, thiz: Any, property: ObservableValu
     }
     else {
         if (property is WritableValue<*>) {
-            @suppress("UNCHECKED_CAST", "NAME_SHADOWING")
+            [suppress("UNCHECKED_CAST", "NAME_SHADOWING")]
             val property = property as WritableValue<T>
             val e = Pair(thiz, name)
             val g = { enclosing = e; property.setValue(f()); enclosing = null }

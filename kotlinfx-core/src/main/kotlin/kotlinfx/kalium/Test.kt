@@ -79,7 +79,7 @@ private fun template<T>(name: String, f: (() -> T)?, thiz: Any, property: Observ
     }
     else {
         if (property is WritableValue<*>) {
-            @suppress("UNCHECKED_CAST", "NAME_SHADOWING")
+            [suppress("UNCHECKED_CAST", "NAME_SHADOWING")]
             val property = property as WritableValue<T>
             val e = Pair(thiz, name)
             val g = { enclosing = e; property.setValue(f()); enclosing = null }
@@ -108,11 +108,11 @@ public fun TextInputControl.text(f: (() -> String)? = null): String =
 public fun Label.text(f: (() -> String)? = null): String =
     template<String>("text", f, this, textProperty()!!)
 
-@suppress("UNCHECKED_CAST")
+[suppress("UNCHECKED_CAST")]
 public fun ProgressIndicator.progress(f: (() -> Double)? = null): Double =
     template<Double>("progress", f, this, progressProperty()!! as ObservableValue<Double>)
 
-@suppress("UNCHECKED_CAST")
+[suppress("UNCHECKED_CAST")]
 public fun Slider.value(f: (() -> Double)? = null): Double =
     template<Double>("slider", f, this, valueProperty()!! as ObservableValue<Double>)
 

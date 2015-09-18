@@ -7,23 +7,23 @@ import javafx.collections.*
 // These are extension properties that had to be provided by hand
 // as the generation script could not handle them correctly.
 
-@suppress("UNNECESSARY_NOT_NULL_ASSERTION")
+[suppress("UNNECESSARY_NOT_NULL_ASSERTION")]
 public val  javafx.print.JobSettings.pageRangesp: javafx.beans.property.ObjectProperty<*>
     get() = pageRangesProperty()!!
 
-@suppress("UNNECESSARY_NOT_NULL_ASSERTION")
+[suppress("UNNECESSARY_NOT_NULL_ASSERTION")]
 public val <S> javafx.scene.control.TableView.TableViewFocusModel<S>.focusedCellp: javafx.beans.property.ReadOnlyObjectProperty<javafx.scene.control.TablePosition<*,*>>
     get() = focusedCellProperty()!!
 
-@suppress("UNNECESSARY_NOT_NULL_ASSERTION")
+[suppress("UNNECESSARY_NOT_NULL_ASSERTION")]
 public val <S> javafx.scene.control.TreeTableView<S>.columnResizePolicyp: javafx.beans.property.ObjectProperty<javafx.util.Callback<javafx.scene.control.TreeTableView.ResizeFeatures<*>, Boolean>>
     get() = columnResizePolicyProperty()!!
 
-@suppress("UNNECESSARY_NOT_NULL_ASSERTION")
+[suppress("UNNECESSARY_NOT_NULL_ASSERTION")]
 public val <S> javafx.scene.control.TableView<S>.columnResizePolicyp: javafx.beans.property.ObjectProperty<javafx.util.Callback<javafx.scene.control.TableView.ResizeFeatures<*>, Boolean>>
     get() = columnResizePolicyProperty()!!
 
-@suppress("UNNECESSARY_NOT_NULL_ASSERTION")
+[suppress("UNNECESSARY_NOT_NULL_ASSERTION")]
 public val <S, T> javafx.scene.control.TableCell<S, T>.tableRowp: javafx.beans.property.ReadOnlyObjectProperty<javafx.scene.control.TableRow<*>>
     get() = tableRowProperty()!!
 
