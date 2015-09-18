@@ -5,13 +5,15 @@ import javafx.geometry.Orientation
 import javafx.scene.Node
 import javafx.collections.ObservableList
 
-interface K : javafx.scene.layout.Pane {
+interface K {
+    fun getChildren(): ObservableList<Node>
+
     public fun javafx.scene.Node.plus(): javafx.scene.Node {
-        getChildren()!!.add(this)
+        getChildren().add(this)
         return this
     }
     public fun javafx.scene.Node.plus(node: javafx.scene.Node): javafx.scene.Node {
-        getChildren()!!.add(node)
+        getChildren().add(node)
         return node
     }
 }
