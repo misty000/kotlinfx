@@ -5,7 +5,7 @@ import javafx.geometry.Orientation
 import javafx.scene.Node
 import javafx.collections.ObservableList
 
-abstract class  K : javafx.scene.layout.Pane() {
+trait  K : javafx.scene.layout.Pane {
     public fun javafx.scene.Node.plus(): javafx.scene.Node {
         getChildren()!!.add(this)
         return this
@@ -15,6 +15,22 @@ abstract class  K : javafx.scene.layout.Pane() {
         return node
     }
 }
+
+//interface J {
+//    fun getChildren():ObservableList<Node>
+//
+//    fun javafx.scene.Node.plus(): javafx.scene.Node {
+//        getChildren().add(this)
+//        return this
+//    }
+//
+//    fun javafx.scene.Node.plus(node: javafx.scene.Node): javafx.scene.Node {
+//        getChildren().add(node)
+//        return node
+//    }
+//}
+
+//class AnchorPaneJ(vararg children: javafx.scene.Node?):javafx.scene.layout.AnchorPane(*children), J
 
 public fun AnchorPane(
     padding: javafx.geometry.Insets = Insets(0.0),
