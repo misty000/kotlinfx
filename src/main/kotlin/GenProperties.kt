@@ -6,6 +6,7 @@ import util.getPropertyValueType
 import util.allJavaFXClasses
 import util.kotlinfyTypeBound
 import util.projectRoot
+import java.io.File
 import java.nio.file.Paths
 import java.io.FileWriter
 import java.lang.reflect.Modifier
@@ -69,6 +70,7 @@ fun main(args: Array<String>) {
             val va = if (setter == null) "val" else "var"
             var ty: String? = kotlinfyType(getter.getGenericReturnType()!!.getTypeName()!!)
             if (b) ty = getPropertyValueType(ty!!)
+            val isArray = util.isArray(ty)
             val tyParamList = clazz.getTypeParameters().toArrayList()
             val tyParams = util.genTypeParamsString(tyParamList)
             val tyParamsFirst = util.genFirstTypeParamsString(tyParamList)
@@ -77,8 +79,13 @@ fun main(args: Array<String>) {
 @suppress("UNNECESSARY_NOT_NULL_ASSERTION")
 public $va $tyParamsFirst $className$tyParams.$name: $ty
     get() = ${if (!b) "get$suffix" else "${name}Property()!!.get"}()!!
-${if (setter != null)
-"    set(v) = set$suffix(v)" else ""}
+${if (setter != null) {
+    if (!isArray) {
+        "    set(v) = set$suffix(v)"
+    } else {
+        "    set(v) = set$suffix(*v)"
+    }
+} else ""}
 """
             if (!classNamePrinted) {
                 fw.append("\n// "+className+"\n")

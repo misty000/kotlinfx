@@ -50,7 +50,7 @@ fun main(args: Array<String>) {
             val tyParamsFirst = util.genFirstTypeParamsString(tyParamList)
             val template =
 """
-[suppress("USELESS_CAST_STATIC_ASSERT_IS_FINE")] [suppress("UNCHECKED_CAST")]
+@suppress("USELESS_CAST_STATIC_ASSERT_IS_FINE") @suppress("UNCHECKED_CAST")
 public fun $tyParamsFirst $className$tyParams.$shortName(f: (() -> $valTyKt)? = null): $valTyKt =
     template<$valTyKt>("$shortName", f, this, ${name}()!! as ObservableValue<$valTyKt>)
 """
