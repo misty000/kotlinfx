@@ -117,11 +117,10 @@ project(":kotlinfx-core") {
     version = rootProject.version
     archivesBaseName = 'kotlinfx'
     uploadArchives {
-        repositories.mavenDeployer {
-            repository(url: "file:///" + localRepoPath)
-            pom.version = "${rootProject.version}"
-            pom.artifactId = 'kotlinfx'
-            pom.groupId = "${rootProject.group}"
+        repositories {
+            mavenDeployer {
+                repository(url: "file://e:/mistlibs/repo/")
+            }
         }
     }
 
