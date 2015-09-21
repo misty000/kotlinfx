@@ -20,7 +20,11 @@ public fun allJavaFXClasses(): Set<Class<out Object>> {
     val reflections = Reflections(ConfigurationBuilder()
         .setScanners(SubTypesScanner(false), ResourcesScanner())!!
         .setUrls(ClasspathHelper.forClassLoader(c1, c2))!!
-        .filterInputsBy { it!!.startsWith("javafx") && !it.startsWith("javafx.embed") }
+        .filterInputsBy {
+            it!!.startsWith("javafx")
+                && !it.startsWith("javafx.embed")
+                && !it.startsWith("javafx/embed")
+        }
     )
     return reflections.getSubTypesOf(javaClass<Object>())!!
 }
@@ -142,3 +146,19 @@ fun <T> forit(col: Iterable<T>, f: (Iterator<T>) -> Unit) {
     while (it.hasNext()) f(it)
 }
 
+fun isArray(ty: String?): Boolean {
+    return ty in arrayOf("ByteArray", "CharArray", "ShortArray", "IntArray", "LongArray", "FloatArray", "DoubleArray", "BooleanArray")
+}
+
+/*
+fun getPrimitiveType(ty:String?):String? = when(ty) {
+    "ByteArray" -> "Byte"
+    "CharArray" -> "Char"
+    "ShortArray" -> "Short"
+    "IntArray" -> "Int"
+    "LongArray" -> "Long"
+    "FloatArray" -> "Float"
+    "DoubleArray" -> "Double"
+    "BooleanArray" -> "Boolean"
+    else -> null
+}*/

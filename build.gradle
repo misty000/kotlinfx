@@ -25,7 +25,7 @@ apply plugin: "kotlin"
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    compile 'org.reflections:reflections:0.9.9-RC1'
+    compile 'org.reflections:reflections:0.9.10'
 }
 
 sourceSets {

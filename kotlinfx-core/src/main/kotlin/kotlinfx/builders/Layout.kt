@@ -5,13 +5,15 @@ import javafx.geometry.Orientation
 import javafx.scene.Node
 import javafx.collections.ObservableList
 
-trait K : javafx.scene.layout.Pane {
+interface K {
+    fun getChildren(): ObservableList<Node>
+
     public fun javafx.scene.Node.plus(): javafx.scene.Node {
-        getChildren()!!.add(this)
+        getChildren().add(this)
         return this
     }
     public fun javafx.scene.Node.plus(node: javafx.scene.Node): javafx.scene.Node {
-        getChildren()!!.add(node)
+        getChildren().add(node)
         return node
     }
 }
@@ -181,7 +183,7 @@ public class PaneK : javafx.scene.layout.Pane(), K
 public fun Region(
     f: javafx.scene.layout.Region.() -> Unit = {}): javafx.scene.layout.Region
 {
-    val x = Region()
+    val x = Region() // TODO recursive call?
     x.f()
     return x
 }
