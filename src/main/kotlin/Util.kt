@@ -9,10 +9,10 @@ import java.nio.file.Paths
 import java.lang.reflect.TypeVariable
 
 public val projectRoot: String =
-    Paths.get(javaClass<Unit>().getClassLoader()!!.getResource(".")!!.toURI()!!)!!.
-          getParent()!!.getParent()!!.getParent()!!.toFile().getAbsolutePath()
+    Paths.get(Unit::class.java.classLoader!!.getResource(".")!!.toURI()!!)!!.
+            parent!!.parent!!.parent!!.toFile().absolutePath
 
-@suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+@Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
 public fun allJavaFXClasses(): Set<Class<out Object>> {
     // http://stackoverflow.com/questions/520328/can-you-find-all-classes-in-a-package-using-reflection
     val c1 = ClasspathHelper.contextClassLoader()
@@ -26,14 +26,14 @@ public fun allJavaFXClasses(): Set<Class<out Object>> {
                 && !it.startsWith("javafx/embed")
         }
     )
-    return reflections.getSubTypesOf(javaClass<Object>())!!
+    return reflections.getSubTypesOf(Object::class.java)!!
 }
 
 public fun genFirstTypeParamsString(typeParams: List<TypeVariable<out Class<out Any>?>?>): String =
     if (typeParams.isEmpty()) "" else
     // The complexity is due to having to consider bounds on generic parameters
         "<${typeParams map {
-            val bs = it!!.getBounds()!! map { kotlinfyTypeBound(it.toString()) } filterNot { it == "Any" }
+            val bs = it!!.bounds!! map { kotlinfyTypeBound(it.toString()) } filterNot { it == "Any" }
             val bounds = if (bs.isEmpty()) "" else ":" + bs.join(", ")
             "$it$bounds" } join ", "}>"
 
@@ -117,9 +117,9 @@ fun getPropertyValueType0(ty: String, xs: List<String>, ys: List<String>): Strin
         }
     }
     for (y in ys) {
-        val a = "javafx.beans.property.${y}"
-        val b = "javafx.beans.property.ReadOnly${y}"
-        val c = "javafx.beans.property.Simple${y}"
+        val a = "javafx.beans.property.$y"
+        val b = "javafx.beans.property.ReadOnly$y"
+        val c = "javafx.beans.property.Simple$y"
         if (ty.startsWith(a) || ty.startsWith(b) || ty.startsWith(c))
             return if (y == "Integer") "Int" else y
     }

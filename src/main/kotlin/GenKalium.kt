@@ -17,27 +17,27 @@ fun main(args: Array<String>) {
     fw.append("import javafx.beans.value.ObservableValue\n\n")
 
     for (clazz in allJavaFXClasses()) {
-        if (clazz.getCanonicalName() == null) continue;
-        if (!Modifier.isPublic(clazz.getModifiers())) continue
+        if (clazz.canonicalName == null) continue;
+        if (!Modifier.isPublic(clazz.modifiers)) continue
 
-        val className = clazz.getCanonicalName()!!
+        val className = clazz.canonicalName!!
         var classNamePrinted = false
 
-        for (method in clazz.getDeclaredMethods()) {
-            val name = method.getName()!!
+        for (method in clazz.declaredMethods) {
+            val name = method.name!!
 
             if (!name.endsWith("Property")) continue
             if (name.contains("impl_")) continue // For public types that should be treated as private
-            if (!Modifier.isPublic(method.getModifiers())) continue
+            if (!Modifier.isPublic(method.modifiers)) continue
             // TODO JavaFX properties that take a parameter are not supported yet
-            if (method.getParameterCount() > 0) continue
+            if (method.parameterCount > 0) continue
             // TODO Static properties are not supported yet
-            if (Modifier.isStatic(method.getModifiers())) continue
+            if (Modifier.isStatic(method.modifiers)) continue
 
             val shortName = dekeyword(name.substring(0..name.length() -9))
 
             // See http://docs.oracle.com/javafx/2/api/javafx/beans/property/package-summary.html
-            val ty = method.getGenericReturnType()!!.getTypeName()!!
+            val ty = method.genericReturnType!!.typeName!!
             val valTy: String? = getPropertyValueType(ty)
             if (valTy == null) {
                 println("ERROR: $ty")
@@ -45,14 +45,14 @@ fun main(args: Array<String>) {
             }
 
             val valTyKt = kotlinfyType(valTy)
-            val tyParamList = clazz.getTypeParameters().toArrayList()
+            val tyParamList = clazz.typeParameters.toArrayList()
             val tyParams = util.genTypeParamsString(tyParamList)
             val tyParamsFirst = util.genFirstTypeParamsString(tyParamList)
             val template =
 """
-@suppress("USELESS_CAST_STATIC_ASSERT_IS_FINE") @suppress("UNCHECKED_CAST")
+@Suppress("USELESS_CAST_STATIC_ASSERT_IS_FINE", "UNCHECKED_CAST")
 public fun $tyParamsFirst $className$tyParams.$shortName(f: (() -> $valTyKt)? = null): $valTyKt =
-    template<$valTyKt>("$shortName", f, this, ${name}()!! as ObservableValue<$valTyKt>)
+    template<$valTyKt>("$shortName", f, this, $name()!! as ObservableValue<$valTyKt>)
 """
             if (!classNamePrinted) {
                 fw.append("\n// "+className+"\n")

@@ -50,7 +50,7 @@ fun main(args: Array<String>) {
             val tyParamsFirst = util.genFirstTypeParamsString(tyParamList)
             val template =
 """
-@suppress("UNNECESSARY_NOT_NULL_ASSERTION")
+@Suppress("UNNECESSARY_NOT_NULL_ASSERTION")
 public val $tyParamsFirst $className$tyParams.$shortName: $ty
     get() = $name()!!
 """

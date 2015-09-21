@@ -17,21 +17,21 @@ fun main(args: Array<String>) {
     fw.append("package kotlinfx.properties\n\n")
 
     for (clazz in allJavaFXClasses()) {
-        if (clazz.getCanonicalName() == null) continue;
+        if (clazz.canonicalName == null) continue;
         if (!Modifier.isPublic(clazz.getModifiers())) continue
 
-        val className = clazz.getCanonicalName()!!
+        val className = clazz.canonicalName!!
         var classNamePrinted = false
-        val allMethods = clazz.getMethods().toList()
-        val methods = clazz.getDeclaredMethods().toList()
+        val allMethods = clazz.methods.toList()
+        val methods = clazz.declaredMethods.toList()
         val xetterPairs = methods.
-                filter { val name = it.getName()!!; val modifiers = it.getModifiers()
+                filter { val name = it.name!!; val modifiers = it.modifiers
                          (name.startsWith("get") || name.startsWith("set")) && name.length() > 3 &&
-                         (!name.startsWith("get") || it.getParameterCount() == 0) &&
-                         (!name.startsWith("set") || it.getParameterCount() == 1) &&
+                         (!name.startsWith("get") || it.parameterCount == 0) &&
+                         (!name.startsWith("set") || it.parameterCount == 1) &&
                          !Modifier.isStatic(modifiers) && // TODO Static xetters are not supported yet
                          Modifier.isPublic(modifiers)}.
-                groupBy { it.getName()!!.substring(3) }
+                groupBy { it.name!!.substring(3) }
 
         for ((suffix, xetters) in xetterPairs) {
             val name = dekeyword(suffix.first().toString().toLowerCase() + suffix.substring(1))
@@ -52,13 +52,13 @@ fun main(args: Array<String>) {
                 "javafx.fxml.FXMLLoader.controller"
             )) continue
 
-            val setter = xetters.firstOrNull { it.getName()!!.startsWith("set") }
-            var getter0 = xetters.firstOrNull { it.getName()!!.startsWith("get") }
+            val setter = xetters.firstOrNull { it.name!!.startsWith("set") }
+            var getter0 = xetters.firstOrNull { it.name!!.startsWith("get") }
             // Kotlin does not support write-only properties.
             // Still, for example, Button has setDisable without getDisable but there is disableProperty().get().
             // There are approx. 100 situations like this so it is worthwhile to solve the problem in general
             // That is, get the getter from the property.
-            val getterAlt = allMethods.firstOrNull { it.getName()!!.endsWith(name+"Property") }
+            val getterAlt = allMethods.firstOrNull { it.name!!.endsWith(name+"Property") }
             var b = false
             if (getter0 == null && getterAlt == null) continue
             if (getter0 == null && getterAlt != null) {
@@ -68,15 +68,15 @@ fun main(args: Array<String>) {
             val getter = getter0!!
 
             val va = if (setter == null) "val" else "var"
-            var ty: String? = kotlinfyType(getter.getGenericReturnType()!!.getTypeName()!!)
+            var ty: String? = kotlinfyType(getter.genericReturnType!!.typeName!!)
             if (b) ty = getPropertyValueType(ty!!)
             val isArray = util.isArray(ty)
-            val tyParamList = clazz.getTypeParameters().toArrayList()
+            val tyParamList = clazz.typeParameters.toArrayList()
             val tyParams = util.genTypeParamsString(tyParamList)
             val tyParamsFirst = util.genFirstTypeParamsString(tyParamList)
             val template =
 """
-@suppress("UNNECESSARY_NOT_NULL_ASSERTION")
+@Suppress("UNNECESSARY_NOT_NULL_ASSERTION")
 public $va $tyParamsFirst $className$tyParams.$name: $ty
     get() = ${if (!b) "get$suffix" else "${name}Property()!!.get"}()!!
 ${if (setter != null) {

@@ -9,7 +9,7 @@ import javafx.stage.Stage
 import javafx.scene.paint.Color
 
 fun main(args: Array<String>) {
-    Application.launch(javaClass<BindingsTest>())
+    Application.launch(BindingsTest::class.java)
 }
 
 class BindingsTest : Application() {
