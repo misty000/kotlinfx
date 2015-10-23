@@ -2,9 +2,8 @@
 package kotlinfx.builders
 
 public fun AmbientLight(
-    color: javafx.scene.paint.Color? = null,
-    f: javafx.scene.AmbientLight.() -> Unit = {}): javafx.scene.AmbientLight
-{
+        color: javafx.scene.paint.Color? = null,
+        f: javafx.scene.AmbientLight.() -> Unit = {}): javafx.scene.AmbientLight {
     val x = if (color != null) javafx.scene.AmbientLight(color) else javafx.scene.AmbientLight()
     x.f()
     return x
@@ -14,24 +13,21 @@ public fun AmbientLight(
 // For abstract javafx.scene.Cursor a builder does not make sense.
 
 public fun Group(
-    children: MutableCollection<javafx.scene.Node>? = null,
-    f: javafx.scene.Group.() -> Unit = {}): javafx.scene.Group
-{
+        children: MutableCollection<javafx.scene.Node>? = null,
+        f: javafx.scene.Group.() -> Unit = {}): javafx.scene.Group {
     val x = if (children != null) javafx.scene.Group(children) else javafx.scene.Group()
     x.f()
     return x
 }
 
 public fun Group(
-    vararg children: javafx.scene.Node?): javafx.scene.Group
-{
+        vararg children: javafx.scene.Node?): javafx.scene.Group {
     val x = javafx.scene.Group(*children)
     return x
 }
 
 public fun Group(
-    f: javafx.scene.Group.() -> Unit = {}): javafx.scene.Group
-{
+        f: javafx.scene.Group.() -> Unit = {}): javafx.scene.Group {
     val x = javafx.scene.Group()
     x.f()
     return x
@@ -42,8 +38,7 @@ public fun Group(
 // For abstract javafx.scene.Node a builder does not make sense.
 
 public fun ParallelCamera(
-    f: javafx.scene.ParallelCamera.() -> Unit = {}): javafx.scene.ParallelCamera
-{
+        f: javafx.scene.ParallelCamera.() -> Unit = {}): javafx.scene.ParallelCamera {
     val x = javafx.scene.ParallelCamera()
     x.f()
     return x
@@ -52,34 +47,31 @@ public fun ParallelCamera(
 // For abstract javafx.scene.Parent a builder does not make sense.
 
 public fun PerspectiveCamera(
-    fixedEyeAtCameraZero: Boolean = false,
-    f: javafx.scene.PerspectiveCamera.() -> Unit = {}): javafx.scene.PerspectiveCamera
-{
+        fixedEyeAtCameraZero: Boolean = false,
+        f: javafx.scene.PerspectiveCamera.() -> Unit = {}): javafx.scene.PerspectiveCamera {
     val x = javafx.scene.PerspectiveCamera(fixedEyeAtCameraZero)
     x.f()
     return x
 }
 
 public fun PointLight(
-    color: javafx.scene.paint.Color? = null,
-    f: javafx.scene.PointLight.() -> Unit = {}): javafx.scene.PointLight
-{
+        color: javafx.scene.paint.Color? = null,
+        f: javafx.scene.PointLight.() -> Unit = {}): javafx.scene.PointLight {
     val x = if (color != null) javafx.scene.PointLight(color) else javafx.scene.PointLight()
     x.f()
     return x
 }
 
 public fun Scene(
-    width: Double? = null,
-    height: Double? = null,
-    f: javafx.scene.Scene.() -> Unit = {}): javafx.scene.Scene
-{
+        width: Double? = null,
+        height: Double? = null,
+        f: javafx.scene.Scene.() -> Unit = {}): javafx.scene.Scene {
     val x =
-        if (width != null && height != null) {
-            javafx.scene.Scene(javafx.scene.layout.Pane(), width, height)
-        } else {
-            javafx.scene.Scene(javafx.scene.layout.Pane())
-        }
+            if (width != null && height != null) {
+                javafx.scene.Scene(javafx.scene.layout.Pane(), width, height)
+            } else {
+                javafx.scene.Scene(javafx.scene.layout.Pane())
+            }
     x.f()
     return x
 }
@@ -87,8 +79,7 @@ public fun Scene(
 // For abstract javafx.scene.SceneAntialiasing a builder does not make sense.
 
 public fun SnapshotParameters(
-    f: javafx.scene.SnapshotParameters.() -> Unit = {}): javafx.scene.SnapshotParameters
-{
+        f: javafx.scene.SnapshotParameters.() -> Unit = {}): javafx.scene.SnapshotParameters {
     val x = javafx.scene.SnapshotParameters()
     x.f()
     return x
@@ -97,11 +88,10 @@ public fun SnapshotParameters(
 // For immutable javafx.scene.SnapshotResult a builder does not make sense.
 
 public fun SubScene(
-    root: javafx.scene.Parent,
-    width: Double,
-    height: Double,
-    f: javafx.scene.SubScene.() -> Unit = {}): javafx.scene.SubScene
-{
+        root: javafx.scene.Parent,
+        width: Double,
+        height: Double,
+        f: javafx.scene.SubScene.() -> Unit = {}): javafx.scene.SubScene {
     val x = javafx.scene.SubScene(root, width, height)
     x.f()
     return x

@@ -9,8 +9,8 @@ import java.nio.file.Paths
 import java.lang.reflect.TypeVariable
 
 public val projectRoot: String =
-    Paths.get(Unit::class.java.classLoader!!.getResource(".")!!.toURI()!!)!!.
-            parent!!.parent!!.parent!!.toFile().absolutePath
+        Paths.get(Unit::class.java.classLoader!!.getResource(".")!!.toURI()!!)!!.
+                parent!!.parent!!.parent!!.toFile().absolutePath
 
 @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
 public fun allJavaFXClasses(): Set<Class<out Object>> {
@@ -18,33 +18,34 @@ public fun allJavaFXClasses(): Set<Class<out Object>> {
     val c1 = ClasspathHelper.contextClassLoader()
     val c2 = ClasspathHelper.staticClassLoader()
     val reflections = Reflections(ConfigurationBuilder()
-        .setScanners(SubTypesScanner(false), ResourcesScanner())!!
-        .setUrls(ClasspathHelper.forClassLoader(c1, c2))!!
-        .filterInputsBy {
-            it!!.startsWith("javafx")
-                && !it.startsWith("javafx.embed")
-                && !it.startsWith("javafx/embed")
-        }
+            .setScanners(SubTypesScanner(false), ResourcesScanner())!!
+            .setUrls(ClasspathHelper.forClassLoader(c1, c2))!!
+            .filterInputsBy {
+                it!!.startsWith("javafx")
+                        && !it.startsWith("javafx.embed")
+                        && !it.startsWith("javafx/embed")
+            }
     )
     return reflections.getSubTypesOf(Object::class.java)!!
 }
 
 public fun genFirstTypeParamsString(typeParams: List<TypeVariable<out Class<out Any>?>?>): String =
-    if (typeParams.isEmpty()) "" else
-    // The complexity is due to having to consider bounds on generic parameters
-        "<${typeParams map {
-            val bs = it!!.bounds!! map { kotlinfyTypeBound(it.toString()) } filterNot { it == "Any" }
-            val bounds = if (bs.isEmpty()) "" else ":" + bs.join(", ")
-            "$it$bounds" } join ", "}>"
+        if (typeParams.isEmpty()) "" else
+        // The complexity is due to having to consider bounds on generic parameters
+            "<${(typeParams.map {
+                val bs = (it!!.bounds!!.map { kotlinfyTypeBound(it.toString()) }).filterNot { it == "Any" }
+                val bounds = if (bs.isEmpty()) "" else ":" + bs.join(", ")
+                "$it$bounds"
+            }).joinToString(", ")}>"
 
 public fun genTypeParamsString(typeParams: List<TypeVariable<out Class<out Any>?>?>): String =
-    if (typeParams.isEmpty()) "" else "<${typeParams.join(", ")}>"
+        if (typeParams.isEmpty()) "" else "<${typeParams.join(", ")}>"
 
 public fun kotlinfyTypeBound(ty: String): String {
     val t = genproperties.kotlinfyType(ty)
-    return when(t) {
+    return when (t) {
         "javafx.scene.control.TreeTableColumn<S,T>" ->
-        "javafx.scene.control.TreeTableColumn<*,*>"
+            "javafx.scene.control.TreeTableColumn<*,*>"
         else -> t
     }
 }
@@ -99,7 +100,7 @@ public fun kotlinfyType(ty: String): String {
 
 // Map is left out as there were problems.
 public fun getPropertyValueType(ty: String): String? = getPropertyValueType0(
-    ty, listOf("Object", "List", "Set"), listOf("Boolean", "Double", "Float", "Long", "Integer", "String"))
+        ty, listOf("Object", "List", "Set"), listOf("Boolean", "Double", "Float", "Long", "Integer", "String"))
 
 fun getPropertyValueType0(ty: String, xs: List<String>, ys: List<String>): String? {
     for (x in xs) {
@@ -109,11 +110,11 @@ fun getPropertyValueType0(ty: String, xs: List<String>, ys: List<String>): Strin
         val d = "javafx.beans.property.ReadOnly${x}PropertyBase<"
         val e = "javafx.beans.property.Simple${x}Property<"
         when {
-            ty.startsWith(a) -> return ty.substring(a.length()..ty.length() - 2)
-            ty.startsWith(b) -> return ty.substring(b.length()..ty.length() - 2)
-            ty.startsWith(c) -> return ty.substring(c.length()..ty.length() - 2)
-            ty.startsWith(d) -> return ty.substring(d.length()..ty.length() - 2)
-            ty.startsWith(e) -> return ty.substring(e.length()..ty.length() - 2)
+            ty.startsWith(a) -> return ty.substring(a.length..ty.length - 2)
+            ty.startsWith(b) -> return ty.substring(b.length..ty.length - 2)
+            ty.startsWith(c) -> return ty.substring(c.length..ty.length - 2)
+            ty.startsWith(d) -> return ty.substring(d.length..ty.length - 2)
+            ty.startsWith(e) -> return ty.substring(e.length..ty.length - 2)
         }
     }
     for (y in ys) {
@@ -147,7 +148,7 @@ fun <T> forit(col: Iterable<T>, f: (Iterator<T>) -> Unit) {
 }
 
 fun isArray(ty: String?): Boolean {
-    return ty in arrayOf("ByteArray", "CharArray", "ShortArray", "IntArray", "LongArray", "FloatArray", "DoubleArray", "BooleanArray")
+    return arrayOf("ByteArray", "CharArray", "ShortArray", "IntArray", "LongArray", "FloatArray", "DoubleArray", "BooleanArray").containsRaw<String?>(ty)
 }
 
 /*

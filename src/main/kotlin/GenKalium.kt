@@ -1,19 +1,18 @@
 package genkalium
 
-import util.join
+import util.allJavaFXClasses
 import util.dekeyword
 import util.getPropertyValueType
-import util.allJavaFXClasses
 import util.projectRoot
-import java.nio.file.Paths
 import java.io.FileWriter
 import java.lang.reflect.Modifier
+import java.nio.file.Paths
 
 fun main(args: Array<String>) {
     val kaliumPath = Paths.get(projectRoot, "kotlinfx-core", "src", "main", "kotlin", "kotlinfx", "kalium", "Generated.kt")!!
     val fw = FileWriter(kaliumPath.toFile())
     fw.append("package kotlinfx.kalium\n\n")
-    fw.append("import kotlinfx.kalium.template\n\n")
+//    fw.append("import kotlinfx.kalium.template\n")
     fw.append("import javafx.beans.value.ObservableValue\n\n")
 
     for (clazz in allJavaFXClasses()) {
@@ -34,7 +33,7 @@ fun main(args: Array<String>) {
             // TODO Static properties are not supported yet
             if (Modifier.isStatic(method.modifiers)) continue
 
-            val shortName = dekeyword(name.substring(0..name.length() -9))
+            val shortName = dekeyword(name.substring(0..name.length -9))
 
             // See http://docs.oracle.com/javafx/2/api/javafx/beans/property/package-summary.html
             val ty = method.genericReturnType!!.typeName!!
@@ -52,7 +51,7 @@ fun main(args: Array<String>) {
 """
 @Suppress("USELESS_CAST_STATIC_ASSERT_IS_FINE", "UNCHECKED_CAST")
 public fun $tyParamsFirst $className$tyParams.$shortName(f: (() -> $valTyKt)? = null): $valTyKt =
-    template<$valTyKt>("$shortName", f, this, $name()!! as ObservableValue<$valTyKt>)
+    template("$shortName", f, this, $name()!! as ObservableValue<$valTyKt>)
 """
             if (!classNamePrinted) {
                 fw.append("\n// "+className+"\n")

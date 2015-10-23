@@ -1,21 +1,21 @@
 package demos.sevenguis.timerkalium
 
-import kotlinfx.builders.*
-import kotlinfx.properties.*
-import kotlinfx.bindings.*
-import kotlinfx.kalium.*
-import javafx.application.Application
-import javafx.stage.Stage
-import javafx.beans.property.SimpleDoubleProperty
-import javafx.animation.Timeline
+import javafx.animation.Animation
 import javafx.animation.KeyFrame
-import javafx.util.Duration
+import javafx.animation.Timeline
+import javafx.application.Application
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
-import javafx.animation.Animation
+import javafx.stage.Stage
+import javafx.util.Duration
+import kotlinfx.builders.*
+import kotlinfx.kalium.V
+import kotlinfx.kalium.progress
+import kotlinfx.kalium.text
+import kotlinfx.kalium.value
 
 fun main(args: Array<String>) {
-    Application.launch(javaClass<TimerKalium>())
+    Application.launch(TimerKalium::class.java)
 }
 
 class TimerKalium : Application() {
@@ -36,7 +36,8 @@ class TimerKalium : Application() {
                 if (elapsed() < slider.value) elapsed u (elapsed() + 1)
             }
         }))
-        timeline.setCycleCount(Animation.INDEFINITE)
+
+        timeline.cycleCount = Animation.INDEFINITE
         timeline.play()
 
         Stage(stage, title = "Timer") {

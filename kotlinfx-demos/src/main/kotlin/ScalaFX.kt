@@ -1,19 +1,18 @@
 // https://code.google.com/p/scalafx/wiki/GettingStarted
 package demos.scalafx
 
-import kotlinfx.builders.*
-import kotlinfx.properties.*
-import kotlinfx.bindings.*
-import kotlinfx.kalium.*
 import javafx.application.Application
+import javafx.scene.paint.Color
 import javafx.stage.Stage
-import javafx.scene.paint.Color;
-import javafx.beans.value.ChangeListener
-import javafx.beans.value.ObservableValue
-import javafx.beans.binding.When
+import kotlinfx.builders.Pane
+import kotlinfx.builders.Rectangle
+import kotlinfx.builders.Scene
+import kotlinfx.builders.Stage
+import kotlinfx.kalium.fill
+import kotlinfx.kalium.hover
 
 fun main(args: Array<String>) {
-    Application.launch(javaClass<World>())
+    Application.launch(World::class.java)
 }
 
 class World : Application() {

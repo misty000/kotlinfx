@@ -12,5 +12,3 @@ fun main(args: Array<String>) {
     num1 u 2
     println(sum())
 }
-
-

@@ -3,6 +3,9 @@
 // http://docs.oracle.com/javase/8/javafx/api/javafx/beans/binding/package-summary.html
 package kotlinfx.bindings
 
+import javafx.beans.property.BooleanProperty
+import javafx.beans.value.ObservableValue
+
 // http://docs.oracle.com/javase/8/javafx/api/javafx/beans/binding/When.html
 // -------------------------------------------------------------------------
 
@@ -40,8 +43,8 @@ package kotlinfx.bindings
 //fun if_<T>(condition: javafx.beans.value.ObservableBooleanValue, f: () -> javafx.beans.value.ObservableObjectValue<T>): javafx.beans.binding.When.ObjectConditionBuilder<T> =
 //    javafx.beans.binding.When(condition).then(f())!!
 
-fun if_<T>(condition: javafx.beans.value.ObservableBooleanValue, f: () -> T): javafx.beans.binding.When.ObjectConditionBuilder<T> =
-    javafx.beans.binding.When(condition).then(f())!!
+fun <T> if_(condition: javafx.beans.value.ObservableBooleanValue, f: () -> T): javafx.beans.binding.When.ObjectConditionBuilder<T> =
+        javafx.beans.binding.When(condition).then(f())!!
 
 // TODO: http://youtrack.jetbrains.com/issue/KT-1686
 
@@ -75,8 +78,8 @@ fun if_<T>(condition: javafx.beans.value.ObservableBooleanValue, f: () -> T): ja
 //fun <T> javafx.beans.binding.When.ObjectConditionBuilder<T>.else_(f: () -> javafx.beans.value.ObservableObjectValue<T>): javafx.beans.binding.ObjectBinding<T> =
 //    this.otherwise(f())!!
 
-fun <T> javafx.beans.binding.When.ObjectConditionBuilder<T>.else_(f: () -> T): javafx.beans.binding.ObjectBinding<T> =
-    this.otherwise(f())!!
+infix fun <T> javafx.beans.binding.When.ObjectConditionBuilder<T>.else_(f: () -> T): javafx.beans.binding.ObjectBinding<T> =
+        this.otherwise(f())!!
 
 
 // http://docs.oracle.com/javase/8/javafx/api/javafx/beans/binding/NumberExpression.html
@@ -85,65 +88,65 @@ fun <T> javafx.beans.binding.When.ObjectConditionBuilder<T>.else_(f: () -> T): j
 // We cannot use comparison operators for greaterThan etc. because of the way Kotlin handles the translation of these operators
 // The same is true for (in)equality operators.
 
-fun javafx.beans.binding.NumberExpression.plus(other: Double): javafx.beans.binding.NumberBinding =
-    this.add(other)!!
+operator fun javafx.beans.binding.NumberExpression.plus(other: Double): javafx.beans.binding.NumberBinding =
+        this.add(other)!!
 
-fun javafx.beans.binding.NumberExpression.plus(other: Float): javafx.beans.binding.NumberBinding =
-    this.add(other)!!
+operator fun javafx.beans.binding.NumberExpression.plus(other: Float): javafx.beans.binding.NumberBinding =
+        this.add(other)!!
 
-fun javafx.beans.binding.NumberExpression.plus(other: Int): javafx.beans.binding.NumberBinding =
-    this.add(other)!!
+operator fun javafx.beans.binding.NumberExpression.plus(other: Int): javafx.beans.binding.NumberBinding =
+        this.add(other)!!
 
-fun javafx.beans.binding.NumberExpression.plus(other: Long): javafx.beans.binding.NumberBinding =
-    this.add(other)!!
+operator fun javafx.beans.binding.NumberExpression.plus(other: Long): javafx.beans.binding.NumberBinding =
+        this.add(other)!!
 
-fun javafx.beans.binding.NumberExpression.plus(other: javafx.beans.value.ObservableNumberValue): javafx.beans.binding.NumberBinding =
-    this.add(other)!!
+operator fun javafx.beans.binding.NumberExpression.plus(other: javafx.beans.value.ObservableNumberValue): javafx.beans.binding.NumberBinding =
+        this.add(other)!!
 
-fun javafx.beans.binding.NumberExpression.div(other: Double): javafx.beans.binding.NumberBinding =
-    this.divide(other)!!
+operator fun javafx.beans.binding.NumberExpression.div(other: Double): javafx.beans.binding.NumberBinding =
+        this.divide(other)!!
 
-fun javafx.beans.binding.NumberExpression.div(other: Float): javafx.beans.binding.NumberBinding =
-    this.divide(other)!!
+operator fun javafx.beans.binding.NumberExpression.div(other: Float): javafx.beans.binding.NumberBinding =
+        this.divide(other)!!
 
-fun javafx.beans.binding.NumberExpression.div(other: Int): javafx.beans.binding.NumberBinding =
-    this.divide(other)!!
+operator fun javafx.beans.binding.NumberExpression.div(other: Int): javafx.beans.binding.NumberBinding =
+        this.divide(other)!!
 
-fun javafx.beans.binding.NumberExpression.div(other: Long): javafx.beans.binding.NumberBinding =
-    this.divide(other)!!
+operator fun javafx.beans.binding.NumberExpression.div(other: Long): javafx.beans.binding.NumberBinding =
+        this.divide(other)!!
 
-fun javafx.beans.binding.NumberExpression.div(other: javafx.beans.value.ObservableNumberValue): javafx.beans.binding.NumberBinding =
-    this.divide(other)!!
+operator fun javafx.beans.binding.NumberExpression.div(other: javafx.beans.value.ObservableNumberValue): javafx.beans.binding.NumberBinding =
+        this.divide(other)!!
 
-fun javafx.beans.binding.NumberExpression.times(other: Double): javafx.beans.binding.NumberBinding =
-    this.multiply(other)!!
+operator fun javafx.beans.binding.NumberExpression.times(other: Double): javafx.beans.binding.NumberBinding =
+        this.multiply(other)!!
 
-fun javafx.beans.binding.NumberExpression.times(other: Float): javafx.beans.binding.NumberBinding =
-    this.multiply(other)!!
+operator fun javafx.beans.binding.NumberExpression.times(other: Float): javafx.beans.binding.NumberBinding =
+        this.multiply(other)!!
 
-fun javafx.beans.binding.NumberExpression.times(other: Int): javafx.beans.binding.NumberBinding =
-    this.multiply(other)!!
+operator fun javafx.beans.binding.NumberExpression.times(other: Int): javafx.beans.binding.NumberBinding =
+        this.multiply(other)!!
 
-fun javafx.beans.binding.NumberExpression.times(other: Long): javafx.beans.binding.NumberBinding =
-    this.multiply(other)!!
+operator fun javafx.beans.binding.NumberExpression.times(other: Long): javafx.beans.binding.NumberBinding =
+        this.multiply(other)!!
 
-fun javafx.beans.binding.NumberExpression.times(other: javafx.beans.value.ObservableNumberValue): javafx.beans.binding.NumberBinding =
-    this.multiply(other)!!
+operator fun javafx.beans.binding.NumberExpression.times(other: javafx.beans.value.ObservableNumberValue): javafx.beans.binding.NumberBinding =
+        this.multiply(other)!!
 
-fun javafx.beans.binding.NumberExpression.minus(other: Double): javafx.beans.binding.NumberBinding =
-    this.subtract(other)!!
+operator fun javafx.beans.binding.NumberExpression.minus(other: Double): javafx.beans.binding.NumberBinding =
+        this.subtract(other)!!
 
-fun javafx.beans.binding.NumberExpression.minus(other: Float): javafx.beans.binding.NumberBinding =
-    this.subtract(other)!!
+operator fun javafx.beans.binding.NumberExpression.minus(other: Float): javafx.beans.binding.NumberBinding =
+        this.subtract(other)!!
 
-fun javafx.beans.binding.NumberExpression.minus(other: Int): javafx.beans.binding.NumberBinding =
-    this.subtract(other)!!
+operator fun javafx.beans.binding.NumberExpression.minus(other: Int): javafx.beans.binding.NumberBinding =
+        this.subtract(other)!!
 
-fun javafx.beans.binding.NumberExpression.minus(other: Long): javafx.beans.binding.NumberBinding =
-    this.subtract(other)!!
+operator fun javafx.beans.binding.NumberExpression.minus(other: Long): javafx.beans.binding.NumberBinding =
+        this.subtract(other)!!
 
-fun javafx.beans.binding.NumberExpression.minus(other: javafx.beans.value.ObservableNumberValue): javafx.beans.binding.NumberBinding =
-    this.subtract(other)!!
+operator fun javafx.beans.binding.NumberExpression.minus(other: javafx.beans.value.ObservableNumberValue): javafx.beans.binding.NumberBinding =
+        this.subtract(other)!!
 
 
 // http://docs.oracle.com/javase/8/javafx/api/javafx/beans/binding/BooleanExpression.html
@@ -155,8 +158,8 @@ fun javafx.beans.binding.NumberExpression.minus(other: javafx.beans.value.Observ
 // http://docs.oracle.com/javase/8/javafx/api/javafx/beans/binding/StringExpression.html
 // -------------------------------------------------------------------------------------
 
-fun javafx.beans.binding.StringExpression.plus(other: Any?): javafx.beans.binding.StringExpression =
-    this.concat(other)!!
+operator fun javafx.beans.binding.StringExpression.plus(other: Any?): javafx.beans.binding.StringExpression =
+        this.concat(other)!!
 
 
 // http://docs.oracle.com/javase/8/javafx/api/javafx/beans/binding/ObjectExpression.html
@@ -181,6 +184,3 @@ fun javafx.beans.binding.StringExpression.plus(other: Any?): javafx.beans.bindin
 // ----------------------------------------------------------------------------------
 
 // No opportunity to provide overriden operators.
-
-
-

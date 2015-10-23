@@ -2,18 +2,6 @@ package kotlinfx.kalium
 
 import javafx.beans.value.ObservableValue
 import javafx.beans.value.WritableValue
-import javafx.beans.property.Property
-import javafx.scene.Node
-import javafx.scene.control.ComboBoxBase
-import javafx.scene.control.TextInputControl
-import javafx.scene.control.ProgressBar
-import javafx.scene.control.ProgressIndicator
-import javafx.scene.control.Slider
-import java.util.Observable
-import javafx.scene.control.Label
-import javafx.scene.shape.Rectangle
-import javafx.scene.paint.Paint
-import javafx.scene.shape.Shape
 
 
 private var enclosing: Pair<Any, String>? = null
@@ -27,17 +15,17 @@ private val listenerMap: MutableMap<Pair<Any, String>, MutableSet<Any>> = hashMa
 public class V<T>(private var value: T) {
     val callbacks: MutableList<() -> Unit> = arrayListOf()
 
-    fun invoke(): T {
+    operator fun invoke(): T {
         if (enclosing != null &&
-        (isConstruction || !listenerMap.containsKey(enclosing) || !listenerMap.get(enclosing)!!.contains(this))) {
+                (isConstruction || !listenerMap.containsKeyRaw(enclosing) || !listenerMap.getRaw(enclosing)!!.contains(this))) {
             val e = enclosing!!
-            listenerMap.getOrPut(e) { hashSetOf() } .add(this)
-            callbacks.add { calcMap.get(e)!!() }
+            listenerMap.getOrPut(e) { hashSetOf() }.add(this)
+            callbacks.add { calcMap[e]!!() }
         }
         return value
     }
 
-    fun u(newValue: T) {
+    infix fun u(newValue: T) {
         value = newValue
         for (callback in callbacks) {
             callback()
@@ -51,30 +39,30 @@ public class K<T>(private val calc: () -> T) {
         calcMap.put(e, {})
         isConstruction = true; enclosing = e; calc(); enclosing = null; isConstruction = false
     }
+
     val callbacks: MutableList<() -> Unit> = arrayListOf()
 
-    fun invoke(): T {
+    operator fun invoke(): T {
         if (enclosing != null &&
-        (isConstruction || !listenerMap.containsKey(enclosing) || !listenerMap.get(enclosing)!!.contains(this))) {
+                (isConstruction || !listenerMap.containsKeyRaw(enclosing) || !listenerMap.getRaw(enclosing)!!.contains(this))) {
             val e = enclosing!!
-            listenerMap.getOrPut(e) { hashSetOf() } .add(this)
-            callbacks.add { calcMap.get(e)!!() }
+            listenerMap.getOrPut(e) { hashSetOf() }.add(this)
+            callbacks.add { calcMap[e]!!() }
         }
         return calc()
     }
 }
 
 
-fun template<T>(name: String, f: (() -> T)?, thiz: Any, property: ObservableValue<T>): T {
+fun <T> template(name: String, f: (() -> T)?, thiz: Any, property: ObservableValue<T>): T {
     if (f == null) {
         if (enclosing != null &&
-        (isConstruction || !listenerMap.containsKey(enclosing) || !listenerMap.get(enclosing)!!.contains(thiz))) {
+                (isConstruction || !listenerMap.containsKeyRaw(enclosing) || !listenerMap.getRaw(enclosing)!!.contains(thiz))) {
             val e = enclosing!!
-            listenerMap.getOrPut(e) { hashSetOf() } .add(thiz)
-            property.addListener { v: Any?, o: Any?, n: Any? -> calcMap.get(e)!!() }
+            listenerMap.getOrPut(e) { hashSetOf() }.add(thiz)
+            property.addListener { v: Any?, o: Any?, n: Any? -> calcMap[e]!!() }
         }
-    }
-    else {
+    } else {
         if (property is WritableValue<*>) {
             @Suppress("UNCHECKED_CAST", "NAME_SHADOWING")
             val property = property as WritableValue<T>

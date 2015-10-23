@@ -2,10 +2,9 @@
 package kotlinfx.builders
 
 public fun Canvas(
-    width: Double = 0.0,
-    height: Double = 0.0,
-    f: javafx.scene.canvas.Canvas.() -> Unit = {}): javafx.scene.canvas.Canvas
-{
+        width: Double = 0.0,
+        height: Double = 0.0,
+        f: javafx.scene.canvas.Canvas.() -> Unit = {}): javafx.scene.canvas.Canvas {
     val x = javafx.scene.canvas.Canvas(width, height)
     x.f()
     return x
