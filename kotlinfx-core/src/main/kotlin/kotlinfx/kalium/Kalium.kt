@@ -1,5 +1,6 @@
 package kotlinfx.kalium
 
+import javafx.beans.property.*
 import javafx.beans.value.ObservableValue
 import javafx.beans.value.WritableValue
 
@@ -75,3 +76,34 @@ fun <T> template(name: String, f: (() -> T)?, thiz: Any, property: ObservableVal
     return property.value!!
 }
 
+/*
+ * experimental
+ */
+fun BooleanProperty.bind(f: () -> Boolean) {
+    template("value", f, this, this)
+}
+
+fun DoubleProperty.bind(f: () -> Double) {
+    template("value", f, this, this)
+}
+
+fun FloatProperty.bind(f: () -> Float) {
+    template("value", f, this, this)
+}
+
+fun LongProperty.bind(f: () -> Long) {
+    template("value", f, this, this)
+}
+
+fun IntegerProperty.bind(f: () -> Int) {
+    template("value", f, this, this)
+}
+
+fun <T> ObjectProperty<T>.bind(f: () -> T) {
+    template("value", f, this, this)
+}
+
+fun listen(f: () -> Unit) {
+    val obs = SimpleObjectProperty<Any>()
+    template("listen", f, obs, obs)
+}
