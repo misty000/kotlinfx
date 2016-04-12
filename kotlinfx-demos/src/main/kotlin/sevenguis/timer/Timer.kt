@@ -30,12 +30,12 @@ class Timer : Application() {
         val reset = Button("Reset")
 
         val elapsed = SimpleDoubleProperty(0.0)
-        progress.progressp bind (elapsed / slider.valuep)
+        progress.progressp.bind(elapsed / slider.valuep)
         // TODO: closure instead of callable
-        numericProgress.textp bind Bindings.createStringBinding(object : Callable<String> {
+        numericProgress.textp.bind(Bindings.createStringBinding(object : Callable<String> {
             override fun call(): String? =
                     formatElapsed(elapsed.v)
-        }, elapsed)
+        }, elapsed))
         reset.setOnAction { elapsed.v = 0.0 }
 
         // TODO: Why can't I use closure syntax here?

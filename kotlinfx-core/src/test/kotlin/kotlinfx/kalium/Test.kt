@@ -27,15 +27,16 @@ private var isConstruction = false
 private val listenerMap: MutableMap<Pair<Any, String>, MutableSet<Any>> = hashMapOf()
 
 
-public class V<T>(private var value: T) {
+class V<T>(private var value: T) {
     val callbacks: MutableList<() -> Unit> = arrayListOf()
 
     fun invoke(): T {
-        if (enclosing != null &&
-                (isConstruction || !listenerMap.containsKeyRaw(enclosing) || !listenerMap.getRaw(enclosing)!!.contains(this))) {
-            val e = enclosing!!
+        val _enclosing = enclosing
+        if (_enclosing != null &&
+                (isConstruction || !listenerMap.containsKey(_enclosing) || !listenerMap[_enclosing]!!.contains(this))) {
+            val e = _enclosing
             listenerMap.getOrPut(e) { hashSetOf() }.add(this)
-            callbacks.add { calcMap.get(e)!!() }
+            callbacks.add { calcMap[e]!!() }
         }
         return value
     }
@@ -48,7 +49,7 @@ public class V<T>(private var value: T) {
     }
 }
 
-public class K<T>(private val calc: () -> T) {
+class K<T>(private val calc: () -> T) {
     init {
         val e = Pair(this, "K")
         calcMap.put(e, {})
@@ -58,11 +59,12 @@ public class K<T>(private val calc: () -> T) {
     val callbacks: MutableList<() -> Unit> = arrayListOf()
 
     fun invoke(): T {
-        if (enclosing != null &&
-                (isConstruction || !listenerMap.containsKeyRaw(enclosing) || !listenerMap.getRaw(enclosing)!!.contains(this))) {
-            val e = enclosing!!
+        val _enclosing = enclosing
+        if (_enclosing != null &&
+                (isConstruction || !listenerMap.containsKey(_enclosing) || !listenerMap[_enclosing]!!.contains(this))) {
+            val e = _enclosing
             listenerMap.getOrPut(e) { hashSetOf() }.add(this)
-            callbacks.add { calcMap.get(e)!!() }
+            callbacks.add { calcMap[e]!!() }
         }
         return calc()
     }
@@ -71,11 +73,12 @@ public class K<T>(private val calc: () -> T) {
 
 private fun <T> template(name: String, f: (() -> T)?, thiz: Any, property: ObservableValue<T>): T {
     if (f == null) {
-        if (enclosing != null &&
-                (isConstruction || !listenerMap.containsKeyRaw(enclosing) || !listenerMap.getRaw(enclosing)!!.contains(thiz))) {
-            val e = enclosing!!
+        val _enclosing = enclosing
+        if (_enclosing != null &&
+                (isConstruction || !listenerMap.containsKey(_enclosing) || !listenerMap[_enclosing]!!.contains(thiz))) {
+            val e = _enclosing
             listenerMap.getOrPut(e) { hashSetOf() }.add(thiz)
-            property.addListener { v: Any?, o: Any?, n: Any? -> calcMap.get(e)!!() }
+            property.addListener { v: Any?, o: Any?, n: Any? -> calcMap[e]!!() }
         }
     } else {
         if (property is WritableValue<*>) {
@@ -90,31 +93,29 @@ private fun <T> template(name: String, f: (() -> T)?, thiz: Any, property: Obser
     return property.value!!
 }
 
-public fun Node.disable(f: (() -> Boolean)? = null): Boolean =
+fun Node.disable(f: (() -> Boolean)? = null): Boolean =
         template<Boolean>("disable", f, this, disableProperty()!!)
 
-public fun Node.hover(f: (() -> Boolean)? = null): Boolean =
+fun Node.hover(f: (() -> Boolean)? = null): Boolean =
         template<Boolean>("hover", f, this, hoverProperty()!!)
 
-public fun Node.style(f: (() -> String)? = null): String =
+fun Node.style(f: (() -> String)? = null): String =
         template<String>("style", f, this, styleProperty()!!)
 
-public fun ComboBoxBase<String>.value(f: (() -> String)? = null): String =
+fun ComboBoxBase<String>.value(f: (() -> String)? = null): String =
         template<String>("value", f, this, valueProperty()!!)
 
-public fun TextInputControl.text(f: (() -> String)? = null): String =
+fun TextInputControl.text(f: (() -> String)? = null): String =
         template<String>("text", f, this, textProperty()!!)
 
-public fun Label.text(f: (() -> String)? = null): String =
+fun Label.text(f: (() -> String)? = null): String =
         template<String>("text", f, this, textProperty()!!)
 
-@Suppress("UNCHECKED_CAST")
-public fun ProgressIndicator.progress(f: (() -> Double)? = null): Double =
+@Suppress("UNCHECKED_CAST") fun ProgressIndicator.progress(f: (() -> Double)? = null): Double =
         template<Double>("progress", f, this, progressProperty()!! as ObservableValue<Double>)
 
-@Suppress("UNCHECKED_CAST")
-public fun Slider.value(f: (() -> Double)? = null): Double =
+@Suppress("UNCHECKED_CAST") fun Slider.value(f: (() -> Double)? = null): Double =
         template<Double>("slider", f, this, valueProperty()!! as ObservableValue<Double>)
 
-public fun Shape.fill(f: (() -> Paint)? = null): Paint =
+fun Shape.fill(f: (() -> Paint)? = null): Paint =
         template<Paint>("fill", f, this, fillProperty()!!)

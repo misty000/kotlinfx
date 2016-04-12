@@ -17,11 +17,11 @@ fun main(args: Array<String>) {
 
 class World : Application() {
     override fun start(stage: Stage?) {
-        Stage(stage, title="Hello World") {
-            scene = Scene(width=600.0, height=450.0) {
+        Stage(stage, title = "Hello World") {
+            scene = Scene(width = 600.0, height = 450.0) {
                 fill = Color.LIGHTGREEN
                 root = Pane {
-                    + Rectangle {
+                    +Rectangle {
                         x = 25.0
                         y = 40.0
                         width = 100.0

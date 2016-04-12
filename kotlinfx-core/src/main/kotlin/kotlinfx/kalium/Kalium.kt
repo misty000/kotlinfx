@@ -13,13 +13,14 @@ private var isConstruction = false
 private val listenerMap: MutableMap<Pair<Any, String>, MutableSet<Any>> = hashMapOf()
 
 
-public class V<T>(private var value: T) {
+class V<T>(private var value: T) {
     val callbacks: MutableList<() -> Unit> = arrayListOf()
 
     operator fun invoke(): T {
-        if (enclosing != null &&
-                (isConstruction || !listenerMap.containsKeyRaw(enclosing) || !listenerMap.getRaw(enclosing)!!.contains(this))) {
-            val e = enclosing!!
+        val _enclosing = enclosing
+        if (_enclosing != null &&
+                (isConstruction || !listenerMap.containsKey(_enclosing) || !listenerMap[_enclosing]!!.contains(this))) {
+            val e = _enclosing
             listenerMap.getOrPut(e) { hashSetOf() }.add(this)
             callbacks.add { calcMap[e]!!() }
         }
@@ -34,7 +35,7 @@ public class V<T>(private var value: T) {
     }
 }
 
-public class K<T>(private val calc: () -> T) {
+class K<T>(private val calc: () -> T) {
     init {
         val e = Pair(this, "K")
         calcMap.put(e, {})
@@ -44,9 +45,10 @@ public class K<T>(private val calc: () -> T) {
     val callbacks: MutableList<() -> Unit> = arrayListOf()
 
     operator fun invoke(): T {
-        if (enclosing != null &&
-                (isConstruction || !listenerMap.containsKeyRaw(enclosing) || !listenerMap.getRaw(enclosing)!!.contains(this))) {
-            val e = enclosing!!
+        val _enclosing = enclosing
+        if (_enclosing != null &&
+                (isConstruction || !listenerMap.containsKey(_enclosing) || !listenerMap[_enclosing]!!.contains(this))) {
+            val e = _enclosing
             listenerMap.getOrPut(e) { hashSetOf() }.add(this)
             callbacks.add { calcMap[e]!!() }
         }
@@ -57,9 +59,10 @@ public class K<T>(private val calc: () -> T) {
 
 fun <T> template(name: String, f: (() -> T)?, thiz: Any, property: ObservableValue<T>): T {
     if (f == null) {
-        if (enclosing != null &&
-                (isConstruction || !listenerMap.containsKeyRaw(enclosing) || !listenerMap.getRaw(enclosing)!!.contains(thiz))) {
-            val e = enclosing!!
+        val _enclosing = enclosing
+        if (_enclosing != null &&
+                (isConstruction || !listenerMap.containsKey(_enclosing) || !listenerMap[_enclosing]!!.contains(thiz))) {
+            val e = _enclosing
             listenerMap.getOrPut(e) { hashSetOf() }.add(thiz)
             property.addListener { v: Any?, o: Any?, n: Any? -> calcMap[e]!!() }
         }
